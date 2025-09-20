@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<head>
+    <title>Complex form and routing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body{
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 20px;
+        color:black;
+      }
+      h1{
+        text-align: center;
+        text-decoration:double;
+        color: brown;
+      }
+      p{
+        color: black;
+        text-align: left;
+        text-decoration: dashed;
+      }
+      nav{
+        margin-bottom: 20px;
+      }
+      nav a{
+        margin-right: 15px;
+        text-decoration: none;
+        font-weight: bold;
+        color: blue;
+        cursor: pointer;
+      }
+      .page{
+        display: none;
+      }
+      .active{
+        display: block;
+      }
+      .msg{
+        margin-top: 5px;
+        font-size: 14px;
+      }
+      .error{
+        color: red;
+      }
+      .success{
+        color: green;
+      }
+    </style>
+</head>
+<body>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#form">Form</a>
+    </nav>
+    <section id="home" class="page active">
+      <h1>Welcome</h1>
+      <p>This is the Home Page. Use the navigation above to open the Form.</p>
+      <img src="https://media.istockphoto.com/id/1463013729/photo/online-registration-form-for-modish-form-filling.jpg?s=612x612&w=0&k=20&c=Fnx06haU4IHYLcRpy9Po_TBknvBqVjicGuUWkGu8e6Y=" 
+     alt="Register banner" style="width:650px; height:auto; display:block; margin:0 auto;">
+     <p>👉 Use the navigation above to open the <strong>Form</strong> and try it yourself.</p>
+     <p>This simple application demonstrates form validation, dynamic fields, and client-side routing using HTML, CSS, and JavaScript.</p>
+    </section>
+    <section id="form" class="page">
+      <h2>Registration Form</h2>
+      <form id="registerForm">
+        <label>Email:</label><br>
+        <input type="email" id="email" required>
+        <div id="emailMsg" class="msg"></div>
+        <br><br>
+        <label>Password:</label><br>
+        <input type="password" id="password" required>
+        <div id="passMsg" class="msg"></div>
+        <br><br>
+        <label>Confirm Password:</label><br>
+        <input type="password" id="confirmPassword" required>
+        <div id="confirmMsg" class="msg"></div>
+        <br><br>
+        <label>Role:</label><br>
+        <select id="role">
+          <option value="">-- Select --</option>
+          <option value="student">Student</option>
+          <option value="developer">Developer</option>
+        </select><br><br>
+        <div id="studentFields" style="display:none;">
+          <label>College Name:</label><br>
+          <input type="text" id="college" placeholder="Enter your college name">
+        </div><br><br>
+        <button type="submit">Register</button>
+        </form>
+  </section>
+  <script>
+    function showPage(pageId) {
+      document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+      });
+      document.getElementById(pageId).classList.add("active");
+    }
+    window.addEventListener("hashchange", () => {
+      const page = location.hash.substring(1);
+      if (page) showPage(page);
+    });
+    if (!location.hash) {
+      location.hash = "#home";
+    } else {
+      showPage(location.hash.substring(1));
+    }
+    const roleSelect = document.getElementById("role");
+    const studentFields = document.getElementById("studentFields");
+    roleSelect.addEventListener("change", () => {
+      if (roleSelect.value === "student") {
+        studentFields.style.display = "block"; 
+      } else {
+        studentFields.style.display = "none"; 
+      }
+    });
+    const emailInput = document.getElementById("email");
+    const emailMsg = document.getElementById("emailMsg");
+    emailInput.addEventListener("input", () => {
+      if (emailInput.checkValidity()) {
+        emailMsg.textContent = "✅ Valid Email ";
+        emailMsg.className = "msg success";
+      } else {
+        emailMsg.textContent = "❌ Invalid Email";
+        emailMsg.className = "msg error";
+      }
+    });
+    const passwordInput = document.getElementById("password");
+    const confirmInput = document.getElementById("confirmPassword");
+    const passMsg = document.getElementById("passMsg");
+    const confirmMsg = document.getElementById("confirmMsg");
+    passwordInput.addEventListener("input", () => {
+      const pass = passwordInput.value;
+      if (pass.length < 8) {
+        passMsg.textContent = "❌ Too short (min 8 characters)";
+        passMsg.className = "msg error";
+      } else if (!/[A-Z]/.test(pass)) {
+        passMsg.textContent = "❌ Must include at least 1 uppercase letter";
+        passMsg.className = "msg error";
+      } else if (!/[0-9]/.test(pass)) {
+        passMsg.textContent = "❌ Must include at least 1 number";
+        passMsg.className = "msg error";
+      } else if (!/[!@#$%^&*]/.test(pass)) {
+        passMsg.textContent = "❌ Must include at least 1 special character (!@#$%^&*)";
+        passMsg.className = "msg error";
+      } else {
+        passMsg.textContent = "✅ Strong Password";
+        passMsg.className = "msg success";
+      }
+    });
+    confirmInput.addEventListener("input", () => {
+      if (confirmInput.value === passwordInput.value) {
+        confirmMsg.textContent = "✅ Passwords match";
+        confirmMsg.className = "msg success";
+      } else {
+        confirmMsg.textContent = "❌ Passwords do not match";
+        confirmMsg.className = "msg error";
+      }
+    });
+  </script>
+</body>
+
