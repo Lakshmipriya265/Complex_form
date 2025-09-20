@@ -30,8 +30,5 @@ Form Page contains:
 ## 🛠️ Tech Stack
 - **HTML5**
 - **CSS**
-- **JavaScript **
+- **JavaScript**
 
----
-
-## 📂 Project Structure
